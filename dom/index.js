@@ -5,12 +5,11 @@
  * @author        QuKin <13606184008@163.com>
  * @Date          2022-11-17 08:45:16
  * @LastEditors   QuKin
- * @LastEditTime  2022-11-21 17:12:33
+ * @LastEditTime  2022-11-21 17:11:49
  */
 
 "use strict";
 
-const fs = require('fs');
 
 /**
  * @class QKJson
@@ -44,12 +43,7 @@ class QKJson {
             if (json.indexOf('.json') === -1) {
                 this.json = JSON.parse(json);
             } else {
-                try {
-                    const data = fs.readFileSync(json, 'utf8');
-                    this.json = JSON.parse(data);
-                } catch (err) {
-                    console.log(err);
-                }
+                console.log('请使用node版本才能导入json文件');
             }
         } else {
             this.json = json;
@@ -604,20 +598,6 @@ class QKJson {
     }
 
     /**
-     * node导出
-     * @param {String} filename 文件名
-     */
-    export(filename = 'json') {
-        // let data = '';
-        // if (!this.whereTF) data = JSON.stringify(this.json);
-        // else data = JSON.stringify(this.data);
-
-        if (filename.indexOf('.json') === -1) filename += '.json';
-
-        fs.writeFileSync(filename, JSON.stringify(this.json));
-    }
-
-    /**
      * 清除缓存
      * @returns this
      * 
@@ -640,9 +620,4 @@ class QKJson {
         this.whereTF = [];
         return true;
     }
-}
-
-
-module.exports = function (json = []) {
-    return new QKJson(json);
 }

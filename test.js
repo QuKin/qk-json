@@ -182,8 +182,8 @@ function fun() {
     }).insertKey('age', 10).where('id', '>', 2).update('age', 18).clear();
     main.where('id', '1').select('children').deleteKey('gender').where('id', 2).delete();
     main.export('main');
-    // console.log(main.where('id', '1').select('children').deleteKey('gender'))
-    console.dir(main, { depth: null });
+    main.clear();
+    console.dir(main.get(), { depth: null });
     main.close();
 }
 // fun();

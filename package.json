@@ -1,7 +1,7 @@
 {
   "name": "qk-json",
-  "version": "1.2.1",
-  "description": "js对json数据进行操作",
+  "version": "1.2.3",
+  "description": "js对json数据进行操作,不止增删改查!",
   "main": "index.js",
   "scripts": {
     "test": "node test.js"
@@ -13,8 +13,20 @@
   "keywords": [
     "json",
     "js",
-    "db"
+    "db",
+    "operation",
+    "add",
+    "delete",
+    "change",
+    "select",
+    "check"
   ],
   "author": "QuKin",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "files": [
+    "index.js",
+    "test.js",
+    "test.json"
+  ],
+  "homepage": "http://qukie.gitee.io/qk-json/docs/index.html"
 }
