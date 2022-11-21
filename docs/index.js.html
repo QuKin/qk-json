@@ -1,20 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>index.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="QKJson.html">QKJson</a><ul class='methods'><li data-type='method'><a href="QKJson.html#.clear#clear">clear</a></li><li data-type='method'><a href="QKJson.html#.close#close">close</a></li><li data-type='method'><a href="QKJson.html#.delete#delete">delete</a></li><li data-type='method'><a href="QKJson.html#.deleteKey#deleteKey">deleteKey</a></li><li data-type='method'><a href="QKJson.html#.domExport#domExport">domExport</a></li><li data-type='method'><a href="QKJson.html#.domImport#domImport">domImport</a></li><li data-type='method'><a href="QKJson.html#.eq#eq">eq</a></li><li data-type='method'><a href="QKJson.html#.equal#equal">equal</a></li><li data-type='method'><a href="QKJson.html#.export#export">export</a></li><li data-type='method'><a href="QKJson.html#.first#first">first</a></li><li data-type='method'><a href="QKJson.html#.get#get">get</a></li><li data-type='method'><a href="QKJson.html#.insert#insert">insert</a></li><li data-type='method'><a href="QKJson.html#.insertKey#insertKey">insertKey</a></li><li data-type='method'><a href="QKJson.html#.last#last">last</a></li><li data-type='method'><a href="QKJson.html#.limit#limit">limit</a></li><li data-type='method'><a href="QKJson.html#.orderBy#orderBy">orderBy</a></li><li data-type='method'><a href="QKJson.html#.pagination#pagination">pagination</a></li><li data-type='method'><a href="QKJson.html#.select#select">select</a></li><li data-type='method'><a href="QKJson.html#.set#set">set</a></li><li data-type='method'><a href="QKJson.html#.update#update">update</a></li><li data-type='method'><a href="QKJson.html#.where#where">where</a></li><li data-type='method'><a href="QKJson.html#.whereAll#whereAll">whereAll</a></li><li data-type='method'><a href="QKJson.html#.whereD#whereD">whereD</a></li><li data-type='method'><a href="QKJson.html#.whereS#whereS">whereS</a></li></ul></li><li><a href="this.json%25EF%25BC%259A.html">json：</a></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">index.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const fs = require('fs');
+
 /**
- * @name          QKJson
- * @description   JSON进行操作
- * @version       1.2.1
- * @author        QuKin <13606184008@163.com>
- * @Date          2022-11-17 08:45:16
- * @LastEditors   QuKin
- * @LastEditTime  2022-11-20 20:29:35
+ * @class         QKJson
+ * @version       1.2
+ * @author        QuKin &lt;13606184008@163.com>
  */
 
-"use strict";
-
-const fs = require('fs');
-
-/**
- * @class QKJson
- */
 class QKJson {
     /**
      * 构造函数
@@ -165,19 +203,19 @@ class QKJson {
      * 查询 默认and
      * 用到了eval方法，一些游览器不支持
      * @param {Array} arr 数组
-     * @param {String} [join='&&'] 连接。&&：和；||：或者
+     * @param {String} [join='&amp;&amp;'] 连接。&amp;&amp;：和；||：或者
      * @return this
      * 
-     * 用法：whereAll([['name','bbb'],['id','<',2]])
-     * 解读：json.name=="bbb" && json.id<"2"
+     * 用法：whereAll([['name','bbb'],['id','&lt;',2]])
+     * 解读：json.name=="bbb" &amp;&amp; json.id&lt;"2"
      * 输出：[{id: 1, name: "bbb"}]
      */
-    whereAll(arr, join = '&&') {
+    whereAll(arr, join = '&amp;&amp;') {
         this.whereTF = true;
 
         let temp = [];
         let tempArr = [];
-        for (let i = 0; i < arr.length; i++) {
+        for (let i = 0; i &lt; arr.length; i++) {
             if (arr[i].length == 2) {
                 temp.push([arr[i][0], '==', arr[i][1]]);
             } else {
@@ -257,9 +295,9 @@ class QKJson {
                 this.data = arr.filter((item) => {
                     switch (obj2) {
                         case '===': return item[obj1] === obj3;
-                        case '<': return item[obj1] < obj3;
+                        case '&lt;': return item[obj1] &lt; obj3;
                         case '>': return item[obj1] > obj3;
-                        case '<=': return item[obj1] <= obj3;
+                        case '&lt;=': return item[obj1] &lt;= obj3;
                         case '>=': return item[obj1] >= obj3;
                         case '!=': return item[obj1] != obj3;
                         case '!==': return item[obj1] !== obj3;
@@ -313,9 +351,9 @@ class QKJson {
         this.data = arr.filter((item) => {
             switch (symbol) {
                 case '===': return item[key] === value;
-                case '<': return item[key] < value;
+                case '&lt;': return item[key] &lt; value;
                 case '>': return item[key] > value;
-                case '<=': return item[key] <= value;
+                case '&lt;=': return item[key] &lt;= value;
                 case '>=': return item[key] >= value;
                 case '!=': return item[key] != value;
                 case '!==': return item[key] !== value;
@@ -369,9 +407,9 @@ class QKJson {
      */
     insertKey(key, value = null) {
         if (!this.whereTF) {
-            for (let i = 0; i < this.json.length; i++) this.json[i][key] = value;
+            for (let i = 0; i &lt; this.json.length; i++) this.json[i][key] = value;
         } else {
-            for (let i = 0; i < this.data.length; i++) this.data[i][key] = value;
+            for (let i = 0; i &lt; this.data.length; i++) this.data[i][key] = value;
         }
 
         return this;
@@ -387,9 +425,9 @@ class QKJson {
      */
     update(key, value = null) {
         if (!this.whereTF) {
-            for (let i = 0; i < this.json.length; i++) this.json[i][key] = value;
+            for (let i = 0; i &lt; this.json.length; i++) this.json[i][key] = value;
         } else {
-            for (let i = 0; i < this.data.length; i++) this.data[i][key] = value;
+            for (let i = 0; i &lt; this.data.length; i++) this.data[i][key] = value;
         }
 
         return this;
@@ -423,13 +461,13 @@ class QKJson {
      */
     findDelete(json, path) {
         for (const i in json) {
-            if (json[i] != null && typeof (json[i]) == "object") this.findDelete(json[i], path.concat(i));
+            if (json[i] != null &amp;&amp; typeof (json[i]) == "object") this.findDelete(json[i], path.concat(i));
 
-            for (let j = 0; j < this.data.length; j++) {
+            for (let j = 0; j &lt; this.data.length; j++) {
                 if (JSON.stringify(json[i]) == JSON.stringify(this.data[j])) {
                     // console.log(json[i], path, i);
                     let temp = 'this.json'
-                    for (let o = 0; o < path.length; o++) {
+                    for (let o = 0; o &lt; path.length; o++) {
                         temp += '["' + path[o] + '"]'
                     }
                     // console.log(temp, eval(temp))
@@ -448,9 +486,9 @@ class QKJson {
      */
     deleteKey(key) {
         if (!this.whereTF) {
-            for (let i = 0; i < this.json.length; i++) delete this.json[i][key];
+            for (let i = 0; i &lt; this.json.length; i++) delete this.json[i][key];
         } else {
-            for (let i = 0; i < this.data.length; i++) delete this.data[i][key];
+            for (let i = 0; i &lt; this.data.length; i++) delete this.data[i][key];
         }
 
         return this;
@@ -463,11 +501,11 @@ class QKJson {
      */
     equal(objA, objB) {
         function isObj(object) {
-            return object && typeof (object) == 'object' && Object.prototype.toString.call(object).toLowerCase() == "[object object]";
+            return object &amp;&amp; typeof (object) == 'object' &amp;&amp; Object.prototype.toString.call(object).toLowerCase() == "[object object]";
         }
 
         function isArray(object) {
-            return object && typeof (object) == 'object' && object.constructor == Array;
+            return object &amp;&amp; typeof (object) == 'object' &amp;&amp; object.constructor == Array;
         }
 
         if (!isObj(objA) || !isObj(objB)) return false;
@@ -526,7 +564,7 @@ class QKJson {
             arr.sort(function (a, b) {
                 let convertA = a[pop];
                 let convertB = b[pop];
-                if (typeof convertA == 'string' && typeof convertB == 'string') {
+                if (typeof convertA == 'string' &amp;&amp; typeof convertB == 'string') {
                     if (type == 'asc') return convertA.localeCompare(convertB);
                     return convertB.localeCompare(convertA);
                 } else {
@@ -619,8 +657,7 @@ class QKJson {
 
     /**
      * 清除缓存
-     * @returns this
-	 * 
+     * 
      * 用途：where从头开始和清除data缓存
      */
     clear() {
@@ -640,9 +677,28 @@ class QKJson {
         this.whereTF = [];
         return true;
     }
-}
+}</code></pre>
+        </article>
+    </section>
 
 
-module.exports = function (json = []) {
-    return new QKJson(json);
-}
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Mon Nov 21 2022 07:47:02 GMT+0800 (中国标准时间) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>
