@@ -1,11 +1,13 @@
 /**
  * @name          QKJson
  * @description   JSON进行操作
- * @version       1.3.0
+ * @version       1.3.1
  * @author        QuKin <13606184008@163.com>
  * @Date          2022-11-17 08:45:16
  * @LastEditors   QuKin
- * @LastEditTime  2022-11-23 18:14:04
+ * @LastEditTime  2022-11-23 20:10:25
+ * 
+ * 压缩：https://www.jsjiami.com/jiemi.html
  */
 
 "use strict";
@@ -421,12 +423,10 @@ class QKJson {
 
             for (let j = 0; j < this.data.length; j++) {
                 if (JSON.stringify(json[i]) == JSON.stringify(this.data[j])) {
-                    // console.log(json[i], path, i);
-                    let temp = 'this.json'
+                    let temp = 'this.json';
                     for (let o = 0; o < path.length; o++) {
                         temp += '["' + path[o] + '"]'
                     }
-                    // console.log(temp, eval(temp))
                     eval(temp).splice(i, 1);
                 }
             }

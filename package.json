@@ -1,6 +1,6 @@
 {
   "name": "qk-json",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "js对json数据进行操作,不止增删改查!",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,9 @@
   "files": [
     "index.js",
     "test.js",
-    "test.json"
+    "test.json",
+    "qk-json.js",
+    "qk-json.min.js"
   ],
   "homepage": "http://qukie.gitee.io/qk-json/docs/index.html"
 }
