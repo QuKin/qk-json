@@ -1,11 +1,11 @@
 /**
  * @name          QKJson
  * @description   JSON进行操作
- * @version       1.2.3
+ * @version       1.3.0
  * @author        QuKin <13606184008@163.com>
  * @Date          2022-11-17 08:45:16
  * @LastEditors   QuKin
- * @LastEditTime  2022-11-21 17:11:49
+ * @LastEditTime  2022-11-23 18:14:04
  */
 
 "use strict";
@@ -595,6 +595,197 @@ class QKJson {
 
         // 向一个指定的事件目标派发一个事件
         a.dispatchEvent(event);
+    }
+
+    /**
+     * 内连接
+     * (不支持json有子节点的内的内连接)
+     * @param {JSON} json json数据
+     * @param {String|Array} key 共同的key值
+     * @returns {this} this
+     */
+    innerJoin(json, key) {
+        this.whereTF = true;
+        this.data = [];
+
+        // 获取两个json所有的key值，并去重
+        let keys = [...new Set(Object.keys(this.json[0]).concat(Object.keys(json[0])))];
+        for (let i = 0; i < this.json.length; i++) {
+            for (let j = 0; j < json.length; j++) {
+                // 判断传进来的key值是字符串还是数组
+                if (typeof key === 'string') {
+                    if (this.json[i][key] === json[j][key]) {
+                        let temp = {};
+                        for (let o = 0; o < keys.length; o++) {
+                            temp[keys[o]] = this.json[i][keys[o]] === undefined ? json[j][keys[o]] : this.json[i][keys[o]];
+                        }
+
+                        this.data.push(temp);
+                    }
+                } else if (typeof key === 'object') {
+                    let ifEval = '';
+                    for (let k = 0; k < key.length; k++) {
+                        ifEval += 'this.json[i]["' + key[k] + '"]===json[j]["' + key[k] + '"] && ';
+                    }
+                    // 主要原因就是到最后会多出来：' && '，这个字符，就多加一个判断，也能用splice等其余操作去掉
+                    ifEval += '1===1';
+                    if (eval(ifEval)) {
+                        let temp = {};
+                        for (let o = 0; o < keys.length; o++) {
+                            temp[keys[o]] = this.json[i][keys[o]] === undefined ? json[j][keys[o]] : this.json[i][keys[o]];
+                        }
+
+                        this.data.push(temp);
+                    }
+                }
+
+            }
+        }
+
+        return this;
+    }
+
+    /**
+     * 左连接
+     * (不支持json有子节点的内的左连接)
+     * @param {JSON} json json数据
+     * @param {String|Array} key 共同的key值
+     * @returns {this} this
+     */
+    leftJoin(json, key) {
+        this.whereTF = true;
+        this.data = [];
+
+        let keys = [...new Set(Object.keys(this.json[0]).concat(Object.keys(json[0])))];
+        for (let i = 0; i < this.json.length; i++) {
+            // 因为左连接，this.json为主，json为辅，一个循环判断下来就是一个
+            let temp = {};
+            for (let j = 0; j < json.length; j++) {
+
+                if (typeof key === 'string') {
+                    if (this.json[i][key] === json[j][key]) {
+                        for (let o = 0; o < keys.length; o++) {
+                            temp[keys[o]] = this.json[i][keys[o]] === undefined ? json[j][keys[o]] : this.json[i][keys[o]];
+                        }
+                        // 如果不退出，就会存入空的字符
+                        break;
+                    } else {
+                        // 这里没有break是因为有可能会出现null，如果循环一遍都没有，就是null
+                        for (let o = 0; o < keys.length; o++) {
+                            temp[keys[o]] = this.json[i][keys[o]] === undefined ? null : this.json[i][keys[o]];
+                        }
+                    }
+                } else if (typeof key === 'object') {
+                    let ifEval = '';
+                    for (let k = 0; k < key.length; k++) {
+                        ifEval += 'this.json[i]["' + key[k] + '"]===json[j]["' + key[k] + '"] && ';
+                    }
+                    ifEval += '1===1';
+
+                    if (eval(ifEval)) {
+                        for (let o = 0; o < keys.length; o++) {
+                            temp[keys[o]] = this.json[i][keys[o]] === undefined ? json[j][keys[o]] : this.json[i][keys[o]];
+                        }
+                        break;
+                    } else {
+                        for (let o = 0; o < keys.length; o++) {
+                            temp[keys[o]] = this.json[i][keys[o]] === undefined ? null : this.json[i][keys[o]];
+                        }
+                    }
+                }
+
+            }
+            this.data.push(temp);
+        }
+
+        return this;
+    }
+
+    /**
+     * 右连接
+     * (不支持json有子节点的内的右连接)
+     * @param {JSON} json json数据
+     * @param {String|Array} key 共同的key值
+     * @returns {this} this
+     */
+    rightJoin(json, key) {
+        this.whereTF = true;
+        this.data = [];
+
+        let keys = [...new Set(Object.keys(this.json[0]).concat(Object.keys(json[0])))];
+        for (let i = 0; i < json.length; i++) {
+            let temp = {};
+            for (let j = 0; j < this.json.length; j++) {
+
+                if (typeof key === 'string') {
+                    if (json[i][key] === this.json[j][key]) {
+                        for (let o = 0; o < keys.length; o++) {
+                            temp[keys[o]] = json[i][keys[o]] === undefined ? this.json[j][keys[o]] : json[i][keys[o]];
+                        }
+                        break;
+                    } else {
+                        for (let o = 0; o < keys.length; o++) {
+                            temp[keys[o]] = json[i][keys[o]] === undefined ? null : json[i][keys[o]];
+                        }
+                    }
+                } else if (typeof key === 'object') {
+                    let ifEval = '';
+                    for (let k = 0; k < key.length; k++) {
+                        ifEval += 'json[i]["' + key[k] + '"]===this.json[j]["' + key[k] + '"] && ';
+                    }
+                    ifEval += '1===1';
+
+                    if (eval(ifEval)) {
+                        for (let o = 0; o < keys.length; o++) {
+                            temp[keys[o]] = json[i][keys[o]] === undefined ? this.json[j][keys[o]] : json[i][keys[o]];
+                        }
+                        break;
+                    } else {
+                        for (let o = 0; o < keys.length; o++) {
+                            temp[keys[o]] = json[i][keys[o]] === undefined ? null : json[i][keys[o]];
+                        }
+                    }
+                }
+
+            }
+            this.data.push(temp);
+        }
+
+        return this;
+    }
+
+    /**
+     * 完全连接
+     * (不支持json有子节点的内的完全连接)
+     * @param {JSON} json json数据
+     * @param {String|Array} key 共同的key值
+     * @returns {this} this
+     */
+    fullJoin(json, key) {
+        this.whereTF = true;
+        this.data = [];
+
+        let temp = [];
+        this.leftJoin(json, key);
+        temp.push(...this.data);
+        this.rightJoin(json, key);
+        temp.push(...this.data);
+
+        temp = this.unRepeat(temp, key);
+        this.data = temp;
+
+        return this;
+    }
+
+    /**
+     * json去重
+     * @param {Array} arr json数组
+     * @param {String} key key值
+     * @returns {Array} json数组
+     */
+    unRepeat(arr, key) {
+        const res = new Map();
+        return arr.filter((arr) => !res.has(arr[key]) && res.set(arr[key], 1));
     }
 
     /**

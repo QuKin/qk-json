@@ -1,11 +1,11 @@
 /**
  * @name          QKJson
  * @description   JSON进行操作
- * @version       1.2.3
+ * @version       1.3.0
  * @author        QuKin <13606184008@163.com>
  * @Date          2022-11-17 08:45:16
  * @LastEditors   QuKin
- * @LastEditTime  2022-11-21 17:12:33
+ * @LastEditTime  2022-11-23 18:31:52
  */
 
 "use strict";
@@ -104,7 +104,7 @@ class QKJson {
      * 分页
      * @param {Number} [pages=0] 查询第几页
      * @param {Number} [length=6] 每页的数量
-     * @returns this
+     * @returns {this} this
      * 
      * 用法：pagination(0,6)
      * 解读：查询第一页，每页的数据条数为6条
@@ -119,7 +119,7 @@ class QKJson {
      * 限制查询
      * @param {Number} [start=0] 从start下标开始
      * @param {Number} [end=6] 到end下标结束
-     * @returns this
+     * @returns {this} this
      * 
      * 用法：limit(0,6)
      */
@@ -136,7 +136,7 @@ class QKJson {
      * 查询单个键名
      * @param {String} key 键名
      * @param {Number} num 下标
-     * @returns this
+     * @returns {this} this
      */
     select(key, num = 0) {
         if (!this.whereTF) {
@@ -150,7 +150,7 @@ class QKJson {
     /**
      * 查询指定下标
      * @param {Number} num 下标
-     * @returns this
+     * @returns {this} this
      */
     eq(num) {
         if (!this.whereTF) {
@@ -205,7 +205,7 @@ class QKJson {
      * @param {*} obj1 参数1
      * @param {*} [obj2=null] 参数2
      * @param {*} [obj2=null] 参数3
-     * @returns this
+     * @returns {this} this
      * 
      * 因为js没有重载的概念，所以用arguments来进行判断传入了几个参数
      * 
@@ -275,7 +275,7 @@ class QKJson {
      * 查询，默认为==
      * @param {*} key 键名
      * @param {*} value 键值
-     * @returns this
+     * @returns {this} this
      * 
      * 用法：where('id',1)
      * 解读：json.id==1
@@ -298,7 +298,7 @@ class QKJson {
      * @param {*} key 键名
      * @param {*} symbol 符号，当输入其余的符号，默认是==
      * @param {*} value 键值
-     * @returns this
+     * @returns {this} this
      * 
      * 用法：where('id','===',1)
      * 解读：json.id===1
@@ -328,7 +328,7 @@ class QKJson {
     /**
      * 查询
      * @param {Function} callback 回调
-     * @returns this
+     * @returns {this} this
      * @callback callback 回调
      * 
      * 用法：where((item)=>item.id==1)
@@ -346,9 +346,9 @@ class QKJson {
     }
 
     /**
-     * 插入
+     * 插入数据
      * @param {JSON} json json
-     * @returns this
+     * @returns {this} this
      * 
      * 用法：insert({id:4,name:'eee'})
      */
@@ -363,7 +363,7 @@ class QKJson {
      * 插入键名
      * @param {String} key 要新增的键名
      * @param {*} [value=null] 新增的键名给它赋值
-     * @returns this
+     * @returns {this} this
      * 
      * 用法：insertKey('age',10)
      */
@@ -381,7 +381,7 @@ class QKJson {
      * 修改数据
      * @param {String} key 要修改的键名
      * @param {*} [value=null] 修改的键名给它赋值
-     * @returns this
+     * @returns {this} this
      * 
      * 用法：update('age',12)
      */
@@ -440,9 +440,9 @@ class QKJson {
     }
 
     /**
-     * 删除数据
+     * 删除键名
      * @param {String} key 要删除的键名
-     * @returns this
+     * @returns {this} this
      * 
      * 用法：deleteKey('age')
      */
@@ -513,7 +513,7 @@ class QKJson {
      * 排序
      * @param {Array|String} parameters 排序参数
      * @param {String} [type='asc'] 排序类型
-     * @returns this
+     * @returns {this} this
      * 
      * 用法：orderBy(['age','name'],'desc')
      */
@@ -618,8 +618,199 @@ class QKJson {
     }
 
     /**
+     * 内连接
+     * (不支持json有子节点的内的内连接)
+     * @param {JSON} json json数据
+     * @param {String|Array} key 共同的key值
+     * @returns {this} this
+     */
+    innerJoin(json, key) {
+        this.whereTF = true;
+        this.data = [];
+
+        // 获取两个json所有的key值，并去重
+        let keys = [...new Set(Object.keys(this.json[0]).concat(Object.keys(json[0])))];
+        for (let i = 0; i < this.json.length; i++) {
+            for (let j = 0; j < json.length; j++) {
+                // 判断传进来的key值是字符串还是数组
+                if (typeof key === 'string') {
+                    if (this.json[i][key] === json[j][key]) {
+                        let temp = {};
+                        for (let o = 0; o < keys.length; o++) {
+                            temp[keys[o]] = this.json[i][keys[o]] === undefined ? json[j][keys[o]] : this.json[i][keys[o]];
+                        }
+
+                        this.data.push(temp);
+                    }
+                } else if (typeof key === 'object') {
+                    let ifEval = '';
+                    for (let k = 0; k < key.length; k++) {
+                        ifEval += 'this.json[i]["' + key[k] + '"]===json[j]["' + key[k] + '"] && ';
+                    }
+                    // 主要原因就是到最后会多出来：' && '，这个字符，就多加一个判断，也能用splice等其余操作去掉
+                    ifEval += '1===1';
+                    if (eval(ifEval)) {
+                        let temp = {};
+                        for (let o = 0; o < keys.length; o++) {
+                            temp[keys[o]] = this.json[i][keys[o]] === undefined ? json[j][keys[o]] : this.json[i][keys[o]];
+                        }
+
+                        this.data.push(temp);
+                    }
+                }
+
+            }
+        }
+
+        return this;
+    }
+
+    /**
+     * 左连接
+     * (不支持json有子节点的内的左连接)
+     * @param {JSON} json json数据
+     * @param {String|Array} key 共同的key值
+     * @returns {this} this
+     */
+    leftJoin(json, key) {
+        this.whereTF = true;
+        this.data = [];
+
+        let keys = [...new Set(Object.keys(this.json[0]).concat(Object.keys(json[0])))];
+        for (let i = 0; i < this.json.length; i++) {
+            // 因为左连接，this.json为主，json为辅，一个循环判断下来就是一个
+            let temp = {};
+            for (let j = 0; j < json.length; j++) {
+
+                if (typeof key === 'string') {
+                    if (this.json[i][key] === json[j][key]) {
+                        for (let o = 0; o < keys.length; o++) {
+                            temp[keys[o]] = this.json[i][keys[o]] === undefined ? json[j][keys[o]] : this.json[i][keys[o]];
+                        }
+                        // 如果不退出，就会存入空的字符
+                        break;
+                    } else {
+                        // 这里没有break是因为有可能会出现null，如果循环一遍都没有，就是null
+                        for (let o = 0; o < keys.length; o++) {
+                            temp[keys[o]] = this.json[i][keys[o]] === undefined ? null : this.json[i][keys[o]];
+                        }
+                    }
+                } else if (typeof key === 'object') {
+                    let ifEval = '';
+                    for (let k = 0; k < key.length; k++) {
+                        ifEval += 'this.json[i]["' + key[k] + '"]===json[j]["' + key[k] + '"] && ';
+                    }
+                    ifEval += '1===1';
+
+                    if (eval(ifEval)) {
+                        for (let o = 0; o < keys.length; o++) {
+                            temp[keys[o]] = this.json[i][keys[o]] === undefined ? json[j][keys[o]] : this.json[i][keys[o]];
+                        }
+                        break;
+                    } else {
+                        for (let o = 0; o < keys.length; o++) {
+                            temp[keys[o]] = this.json[i][keys[o]] === undefined ? null : this.json[i][keys[o]];
+                        }
+                    }
+                }
+
+            }
+            this.data.push(temp);
+        }
+
+        return this;
+    }
+
+    /**
+     * 右连接
+     * (不支持json有子节点的内的右连接)
+     * @param {JSON} json json数据
+     * @param {String|Array} key 共同的key值
+     * @returns {this} this
+     */
+    rightJoin(json, key) {
+        this.whereTF = true;
+        this.data = [];
+
+        let keys = [...new Set(Object.keys(this.json[0]).concat(Object.keys(json[0])))];
+        for (let i = 0; i < json.length; i++) {
+            let temp = {};
+            for (let j = 0; j < this.json.length; j++) {
+
+                if (typeof key === 'string') {
+                    if (json[i][key] === this.json[j][key]) {
+                        for (let o = 0; o < keys.length; o++) {
+                            temp[keys[o]] = json[i][keys[o]] === undefined ? this.json[j][keys[o]] : json[i][keys[o]];
+                        }
+                        break;
+                    } else {
+                        for (let o = 0; o < keys.length; o++) {
+                            temp[keys[o]] = json[i][keys[o]] === undefined ? null : json[i][keys[o]];
+                        }
+                    }
+                } else if (typeof key === 'object') {
+                    let ifEval = '';
+                    for (let k = 0; k < key.length; k++) {
+                        ifEval += 'json[i]["' + key[k] + '"]===this.json[j]["' + key[k] + '"] && ';
+                    }
+                    ifEval += '1===1';
+
+                    if (eval(ifEval)) {
+                        for (let o = 0; o < keys.length; o++) {
+                            temp[keys[o]] = json[i][keys[o]] === undefined ? this.json[j][keys[o]] : json[i][keys[o]];
+                        }
+                        break;
+                    } else {
+                        for (let o = 0; o < keys.length; o++) {
+                            temp[keys[o]] = json[i][keys[o]] === undefined ? null : json[i][keys[o]];
+                        }
+                    }
+                }
+
+            }
+            this.data.push(temp);
+        }
+
+        return this;
+    }
+
+    /**
+     * 完全连接
+     * (不支持json有子节点的内的完全连接)
+     * @param {JSON} json json数据
+     * @param {String|Array} key 共同的key值
+     * @returns {this} this
+     */
+    fullJoin(json, key) {
+        this.whereTF = true;
+        this.data = [];
+
+        let temp = [];
+        this.leftJoin(json, key);
+        temp.push(...this.data);
+        this.rightJoin(json, key);
+        temp.push(...this.data);
+
+        temp = this.unRepeat(temp, key);
+        this.data = temp;
+
+        return this;
+    }
+
+    /**
+     * json去重
+     * @param {Array} arr json数组
+     * @param {String} key key值
+     * @returns {Array} json数组
+     */
+    unRepeat(arr, key) {
+        const res = new Map();
+        return arr.filter((arr) => !res.has(arr[key]) && res.set(arr[key], 1));
+    }
+
+    /**
      * 清除缓存
-     * @returns this
+     * @returns {this} this
      * 
      * 用途：where从头开始和清除data缓存
      */
@@ -632,7 +823,7 @@ class QKJson {
 
     /**
      * 关闭
-     * @returns true
+     * @returns {Boolean} true
      */
     close() {
         this.json = [];
