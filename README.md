@@ -12,7 +12,7 @@
 
 > 介绍：js对json数据进行操作
 >
-> 版本：V1.3.1
+> 版本：V1.3.2
 
 方法简洁明了的操作
 
@@ -29,15 +29,19 @@
 
 ### 安装
 
-#### 有npm
+#### NPM
 
 `npm i qk-json`
 
-#### 没有npm
+#### CDN
 
-如没有npm，还可以下载：
-https://gitee.com/qukie/qk-json/blob/master/dom/index.js
-（注意，需要下载下来，不能直接引用）
+##### 开发板
+
+https://unpkg.com/qk-json@1.3.2/qk-json.js
+
+##### 压缩版
+
+https://unpkg.com/qk-json@1.3.2/qk-json.min.js
 
 
 ### 源码
@@ -59,6 +63,22 @@ https://gitee.com/qukie/qk-json/blob/master/dom/index.js
 #### V1.3.0
 
 更新了四种常用的连表查询：内连接、左连接、右连接和完全连接，还有json去重
+
+
+
+### 目录结构
+
+|- docs						开发文档
+|- ------- ...
+|- index.html			重定向到开发文档内
+|- index.js				  针对node的源码
+|- LICENSE				 许可证
+|- package.json	   node配置文件
+|- qk-json.js			  针对DOM的源码
+|- qk-json.min.js	 针对DOM的源码，压缩后
+|- README.md		文档
+|- test.js					 测试代码
+|- test.json				测试代码用到的json数据
 
 ## 使用
 

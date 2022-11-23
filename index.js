@@ -1,11 +1,11 @@
 /**
  * @name          QKJson
  * @description   JSON进行操作
- * @version       1.3.1
+ * @version       1.3.2
  * @author        QuKin <13606184008@163.com>
  * @Date          2022-11-17 08:45:16
  * @LastEditors   QuKin
- * @LastEditTime  2022-11-23 20:07:02
+ * @LastEditTime  2022-11-23 20:19:49
  */
 
 "use strict";
